@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 =head1 NAME
 
@@ -183,11 +183,12 @@ sub parameters {
 	for (0 .. $#$spec) {
 		last if $$spec[$_] eq '*';
 		if ($$spec[$_] eq ';') {
-			splice(@$spec, $_);
+			splice(@$spec, $_, 1);
 			
 			last;
 		} elsif ($$spec[$_] =~ /;/) {
 			my @els = split /;/, $$spec[$_];
+			shift @els if $els[0] eq '';
 			
 			croak "Getopt::Mixed specification contains more than one semicolon."
 					if @els > 2;
@@ -206,7 +207,7 @@ sub parameters {
 
 	# Scan for positional parameters
 	while (@_ > 0) {
-		last if $_[0] =~ /^-/; # stop if named
+		last if defined $_[0] and $_[0] =~ /^-/; # stop if named
 		if ($$spec[0] eq '*') {
 			push @{$result{'*'}}, shift;
 		} else {
