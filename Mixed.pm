@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.01';
+our $VERSION = '1.02';
 
 =head1 NAME
 
@@ -192,7 +192,7 @@ sub parameters {
 			croak "Getopt::Mixed specification contains more than one semicolon."
 					if @els > 2;
 					
-			push @required, $els[0];
+			push @required, $els[0] unless $$spec[$_] =~ /^;/;
 			splice(@$spec, $_, 1, @els);
 			
 			last;
