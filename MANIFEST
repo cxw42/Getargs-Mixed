@@ -1,0 +1,10 @@
+Makefile.PL
+MANIFEST
+Mixed.pm
+README
+t/errors.t
+t/extra.t
+t/method.t
+t/optional.t
+t/sub.t
+t/submethod.t
