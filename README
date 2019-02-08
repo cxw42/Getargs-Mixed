@@ -1,5 +1,5 @@
-Getargs::Mixed version 1.01
-===========================
+Getargs::Mixed
+==============
 
 This is a handy little module to help you handle mixed argument lists passed
 to subroutines. This can handle positional, named, and mixed positional/named
@@ -28,10 +28,7 @@ theory.
 
 COPYRIGHT AND LICENCE
 
-Put the correct copyright and licence information here.
-
 Copyright (C) 2003 Andrew Sterling Hanenkamp
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
-

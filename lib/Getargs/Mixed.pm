@@ -253,7 +253,7 @@ Always exports C<parameters> by default. If you do not want this, use:
 =head1 SEE ALSO
 
 Other similar modules to this one that I'm aware of include:
-L<Getargs::Long> and L<Getopt::GetArgs>.
+L<Getargs::Long>, L<Getopt::GetArgs>, and L<Smart::Args>.
 
 =head1 BUGS
 

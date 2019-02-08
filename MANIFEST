@@ -1,6 +1,8 @@
+Changes
+lib/Getargs/Mixed.pm
 Makefile.PL
 MANIFEST
-Mixed.pm
+MANIFEST.SKIP
 README
 t/errors.t
 t/extra.t
