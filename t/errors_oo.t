@@ -4,7 +4,7 @@ use Test::More tests => 6;
 BEGIN { use_ok('Getargs::Mixed') };
 
 sub foo {
-	my %args = parameters([ qw( x y z ) ], @_);
+	my %args = Getargs::Mixed->new->parameters([ qw( x y z ) ], @_);
 
 	fail("This shouldn't be reachable.");
 }

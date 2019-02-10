@@ -50,7 +50,7 @@ WriteMakefile(
 		provides => {
 			'Getargs::Mixed' => {
 				file => 'Mixed.pm',
-				version => '1.03',
+				version => '1.03_1',
 			},
 		},
 	},

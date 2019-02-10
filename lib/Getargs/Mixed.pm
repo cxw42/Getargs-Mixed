@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.03';
+our $VERSION = '1.03_1';
 
 =head1 NAME
 
@@ -89,7 +89,7 @@ be called like this:
 
   $obj->foo($a, $b, $c); # OR
   foo $obj ($a, $b, $c); # often seen as new My::Class (...)
-  
+
 where C<$obj> is either a blessed reference, package name, or a scalar
 containing a package name.
 
@@ -151,6 +151,9 @@ as well not use this module anyway.
 =cut
 
 sub parameters {
+	my $me = {};	# parsing options applicable to this run
+	$me = shift if UNIVERSAL::isa($_[0], __PACKAGE__);
+
 	my ($invocant, $spec);
 	if (ref $_[0] eq 'ARRAY') {
 		$spec = shift;
@@ -184,24 +187,24 @@ sub parameters {
 		last if $$spec[$_] eq '*';
 		if ($$spec[$_] eq ';') {
 			splice(@$spec, $_, 1);
-			
+
 			last;
 		} elsif ($$spec[$_] =~ /;/) {
 			my @els = split /;/, $$spec[$_];
 			shift @els if $els[0] eq '';
-			
+
 			croak "Getopt::Mixed specification contains more than one semicolon."
 					if @els > 2;
-					
+
 			push @required, $els[0] unless $$spec[$_] =~ /^;/;
 			splice(@$spec, $_, 1, @els);
-			
+
 			last;
 		}
 
 		push @required, $$spec[$_];
 	}
-			
+
 
 	my %result;
 
@@ -231,13 +234,16 @@ sub parameters {
 		$result{$name} = $v;
 	}
 
-	my @missing = grep { !defined $result{$_} } @required;
+	my @missing = $me->{-undef_ok} ?
+		grep { !exists $result{$_} } @required :
+		grep { !defined $result{$_} } @required;
+
 	if (@missing) {
 		confess "Missing these required arguments: ",join(', ',@missing);
 	}
 
 	return defined $self ? ($self, %result) : %result;
-}
+} #parameters()
 
 =head2 EXPORT
 
@@ -249,6 +255,33 @@ Always exports C<parameters> by default. If you do not want this, use:
 
   # ...
   my %args = Getargs::Mixed::parameters([ qw( x y z ) ], @_);
+
+=head1 OBJECT-ORIENTED INTERFACE
+
+Getargs::Mixed supports an object-oriented interface that permits you
+to adjust how the parameters are processed.  For example:
+
+  my $getargs = Getargs::Mixed->new([options...]);
+  my %args = $getargs->parameters([ qw( x y z ) ], @_);
+
+=head2 new
+
+Create a new instance with the given options.  Currently known options are:
+
+=over
+
+=item -undef_ok
+
+The option C<< -undef_ok => 1 >> permits option values to be C<undef>.
+
+=back
+
+=cut
+
+sub new {
+	my $class = shift;
+	bless {@_}, $class;
+}
 
 =head1 SEE ALSO
 
@@ -273,6 +306,6 @@ me at this address for support.
 Copyright 2003 by Andrew Sterling Hanenkamp
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. 
+it under the same terms as Perl itself.
 
 =cut
