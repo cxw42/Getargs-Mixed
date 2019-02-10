@@ -127,7 +127,7 @@ C<parameters> will die.
 The final argument to C<parameters> is always the list of arguments passed to
 the caller, usually C<@_>.
 
-=head2 RESULTS
+=head2 Results
 
 The result returned from the C<parameters> function depends on whether there
 are two arguments or three. If C<parameters> is called with two arguments,
@@ -136,7 +136,7 @@ three arguments, then an invocant is prepended to the list of pairs first.
 If the first argument is not C<"self">, then the invocant will be set to the
 first argument if C<parameters> doesn't detect any invocant.
 
-=head2 ARGUMENT PARSING
+=head1 ARGUMENT PARSING
 
 The way C<parameters> handles arguments is relatively flexible. However, the
 format must always specify all positional parameters first, if any, followed by
@@ -245,7 +245,7 @@ sub parameters {
 	return defined $self ? ($self, %result) : %result;
 } #parameters()
 
-=head2 EXPORT
+=head1 EXPORT
 
 Always exports C<parameters> by default. If you do not want this, use:
 
@@ -269,13 +269,27 @@ C<parameters> is called as a function.
 
 =head2 new
 
-Create a new instance with the given options.  Currently known options are:
+Create a new instance with the given options.  For example:
+
+  my $getargs = Getargs::Mixed->new(-undef_ok => 1);
+
+Currently known options are:
 
 =over
 
 =item -undef_ok
 
-The option C<< -undef_ok => 1 >> permits option values to be C<undef>.
+The option C<< -undef_ok => 1 >> permits the value of a parameter to be
+C<undef>.  For example,
+
+  my %args = parameters(['foo'], -foo => undef);
+
+will fail with a message that required argument C<foo> was not provided, but
+
+    my %args = Getargs::Mixed->new(-undef_ok => 1)
+                             ->parameters(['foo'], -foo => undef);
+
+will succeed, and set C<< $args{foo} >> to C<undef>.
 
 =back
 
