@@ -2,10 +2,19 @@ use 5.008;
 use ExtUtils::MakeMaker;
 use File::Spec;
 
-# Reminder: when bumping the version, also update 'provides' below.
 my $source = File::Spec->catfile(qw(lib Getargs Mixed.pm));
 
-WriteMakefile(
+# Module metadata {{{1
+my $provides;
+eval {
+	require Module::Metadata;
+	$provides = Module::Metadata->provides(version => '2', dir => 'lib');
+		# Thanks to https://stackoverflow.com/a/28928985/2877364 by LEONT
+};
+# }}}1
+
+# Main options for EUMM
+my %opts = (
 	NAME			=> 'Getargs::Mixed',
 	VERSION_FROM	=> $source,
 	ABSTRACT_FROM	=> $source,
@@ -29,13 +38,11 @@ WriteMakefile(
 		'meta-spec' => { version => 2 },
 
 		resources => {
-			# RT is still the bug tracker
+			# The code is on GitHub (but we'll take bug reports on RT, too)
 			bugtracker  => {
-				web	=> 'https://rt.cpan.org/Public/Dist/Display.html?Name=Getargs-Mixed',
-				mailto => 'bug-Getargs-Mixed@rt.cpan.org',
+				web	=> 'https://github.com/cxw42/Getargs-Mixed/issues',
 			},
 
-			# The code is on GitHub
 			repository => {
 				type => 'git',
 				url  => 'https://github.com/cxw42/Getargs-Mixed.git',
@@ -47,14 +54,20 @@ WriteMakefile(
 			'Christopher White <cxw@cpan.org>',
 		],
 
-		provides => {
-			'Getargs::Mixed' => {
-				file => 'Mixed.pm',
-				version => '1.03_1',
+		$provides ? (provides => $provides) : (),
+
+		prereqs => {
+			develop => {
+				recommends => {
+					'Module::Metadata' => '1.000016',
+				},
 			},
 		},
+
 	},
 
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
 	clean => { FILES => 'Build-Hopen-*' },
 );
+
+WriteMakefile(%opts);

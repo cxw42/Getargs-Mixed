@@ -58,29 +58,29 @@ Getargs::Mixed - Perl extension allowing subs to handle mixed parameter lists
   $obj->bar($x, -z => $z, -y => $y);
   My::Class->bar(-z => $z, -x => $x, -y => $y); # etc...
 
-  # Calling baz is slight dangerous! UNIVERSAL::isa($x, 'My::Class') better not
-  # be true in the last case or problems may arrise!
+  # Calling baz is slightly dangerous! UNIVERSAL::isa($x, 'My::Class') better
+  # not be true in the last case or problems may arise!
   $obj->baz($x, $y, $z);
   My::Class->baz($x, -z => $z, -y => $y);
   baz($x, -z => $z, -y => $y); # etc...
 
-=head1 DESCRIPTION
+=head1 THE parameters() FUNCTION
 
 This allows for the handling mixed argument lists to subroutines. It is meant
 to be flexible and lightweight. It doesn't do any "type-checking", it simply
 turns your parameter lists into hash according to a simple specification.
 
-The only function in this module is C<parameters> and it handles all the work
+The main function in this module is C<parameters> and it handles all the work
 of figuring out which parameters have been sent and which have not. When it
 detects an error, it will die with L<Carp::confess|Carp/confess>.
 
-=head2 ARGUMENTS
+=head2 Arguments
 
 The C<parameters> function takes either two or three arguments. If the first
 argument is a string, it takes three arguments. If the first argument is
 an array reference, it takes just two.
 
-=head3 INVOCANT
+=head3 Invocant
 
 If the first parameter is a string, it should either be a package name or the
 special string C<"self">. Passing C<"self"> in this argument will cause the
@@ -104,7 +104,7 @@ that the argument is the first parameter. In this case, the returned list will
 contain the given package name as the first element before the list of pairs
 even though no invocant was actually used.
 
-=head3 SPECIFICATION
+=head3 Specification
 
 The array reference argument to C<parameters> contains a list of variable names
 that the caller accepts. The parameter list is ordered so that if the user
@@ -115,17 +115,17 @@ point are required and all following are optional. If no semicolon exists, then
 C<parameters> will consider all to be required and die when one of the required
 parameters is missing.
 
-Finally, the list may end with a '*' which will cause C<parameters> to collect
-any extra unexpected named or positional parameters.  Extra named parameters
-will be inserted into the returned arguments list. Extra positional parameters
-will be placed in array reference and assigned to the '*' key of the returned
-arguments list. If '*' is not specified and extra arguments are found
+Finally, the list may end with a C<'*'> which will cause C<parameters> to
+collect any extra unexpected named or positional parameters.  Extra named
+parameters will be inserted into the returned arguments list. Extra positional
+parameters will be placed in array reference and assigned to the '*' key of the
+returned arguments list. If '*' is not specified and extra arguments are found
 C<parameters> will die.
 
-=head3 ARGUMENTS
+=head3 Arguments to parse
 
 The final argument to C<parameters> is always the list of arguments passed to
-the caller.
+the caller, usually C<@_>.
 
 =head2 RESULTS
 
@@ -264,6 +264,9 @@ to adjust how the parameters are processed.  For example:
   my $getargs = Getargs::Mixed->new([options...]);
   my %args = $getargs->parameters([ qw( x y z ) ], @_);
 
+The arguments to the C<parameters> method are exactly the same as when
+C<parameters> is called as a function.
+
 =head2 new
 
 Create a new instance with the given options.  Currently known options are:
@@ -288,22 +291,15 @@ sub new {
 Other similar modules to this one that I'm aware of include:
 L<Getargs::Long>, L<Getopt::GetArgs>, and L<Smart::Args>.
 
-=head1 BUGS
-
-This is probably backwards compatible to Perl 5.6 and even earlier but no
-attempt has been made to test this theory.
-
-I suspect this is rather slower than it could be. I hacked this together in an
-afternoon without a whole lot of planning.
-
 =head1 AUTHOR
 
-Andrew Sterling Hanenkamp, E<lt>hanenkamp@users.sourceforge.netE<gt>. Contact
-me at this address for support.
+Andrew Sterling Hanenkamp, E<lt>hanenkamp@users.sourceforge.netE<gt>
+(HANENKAMP).  Additional code by Christopher White (CXW).
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2003 by Andrew Sterling Hanenkamp
+Copyright 2003--2019 by Andrew Sterling Hanenkamp and Christopher White.
+All rights reserved.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
