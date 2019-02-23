@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.03_1';
+our $VERSION = '1.04';
 
 =head1 NAME
 

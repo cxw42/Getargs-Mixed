@@ -20,7 +20,7 @@ my %opts = (
 	ABSTRACT_FROM	=> $source,
 
 	LICENSE			=> 'perl_5',
-	AUTHOR			=> 'Andrew Sterling Hanenkamp <hanenkamp@users.sourceforge.net>',
+	AUTHOR			=> 'Andrew Sterling Hanenkamp <hanenkamp@cpan.org>',
 
 	MIN_PERL_VERSION=> '5.008',
 	PREREQ_PM => {
@@ -69,7 +69,7 @@ my %opts = (
 	},
 
 	dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-	clean => { FILES => 'Build-Hopen-*' },
+	clean => { FILES => 'Getargs-Mixed-*' },
 );
 
 WriteMakefile(%opts);
