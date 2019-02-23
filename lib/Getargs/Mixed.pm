@@ -12,7 +12,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.04';
+our $VERSION = '1.04_1';	# TRIAL
 
 =head1 NAME
 
@@ -165,7 +165,7 @@ sub parameters {
 	}
 
 	croak "Getopt::Mixed specification contains more than one semicolon."
-			if grep /;/, @$spec > 1;
+			if grep(/;/, @$spec) > 1;
 
 	# Extract invocant
 	my $self;
@@ -185,17 +185,18 @@ sub parameters {
 	my @required;
 	for (0 .. $#$spec) {
 		last if $$spec[$_] eq '*';
+
 		if ($$spec[$_] eq ';') {
 			splice(@$spec, $_, 1);
 
 			last;
-		} elsif ($$spec[$_] =~ /;/) {
-			my @els = split /;/, $$spec[$_];
-			shift @els if $els[0] eq '';
 
-			croak "Getopt::Mixed specification contains more than one semicolon."
+		} elsif ($$spec[$_] =~ /;/) {
+			my @els = split /;/, $$spec[$_], -1;	# -1 => keep empty fields
+			croak "Getopt::Mixed specification contains multiple semicolons."
 					if @els > 2;
 
+			shift @els if @els and $els[0] eq '';	# semicolon first
 			push @required, $els[0] unless $$spec[$_] =~ /^;/;
 			splice(@$spec, $_, 1, @els);
 
@@ -204,7 +205,6 @@ sub parameters {
 
 		push @required, $$spec[$_];
 	}
-
 
 	my %result;
 
