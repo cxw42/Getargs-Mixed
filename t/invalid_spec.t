@@ -13,7 +13,10 @@ BEGIN {
 		[ {} ],					# can't take non-[] ref
 		[ MyTestClass->new ],	# can't take non-[] ref
 		[ [qw(a b ; c d ; e)], 1, 2 ],	# only one semicolon allowed
-		[ [qw(;; a)], 1 ],		# only one semicolon
+		[ [qw(;; a)], 1 ],		# only one semicolon allowed
+		[ [qw(;)] ],			# Semicolon without an actual name
+		[ [' ;'] ],				# Ditto, but with leading WS
+		[ ['; '] ],				# Ditto, but with trailing WS
 	);
 }
 
@@ -26,7 +29,7 @@ foreach (@tests) {
 		parameters(@$_, 1);
 	};
 
-	diag("Expected exception; got $@");
+	#diag("Expected exception; got $@");
 	if ($@) {
 		pass("Exception thrown as it should be.");
 	} else {
@@ -37,7 +40,7 @@ foreach (@tests) {
 		Getargs::Mixed->new->parameters(@$_, 1);
 	};
 
-	diag("Expected exception; got $@");
+	#diag("Expected exception; got $@");
 	if ($@) {
 		pass("Exception thrown as it should be (OO).");
 	} else {
@@ -45,4 +48,4 @@ foreach (@tests) {
 	}
 
 	++$testidx;
-}
+} #foreach test
