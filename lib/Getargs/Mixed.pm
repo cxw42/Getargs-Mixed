@@ -11,7 +11,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.04_2';	# TRIAL
+our $VERSION = '1.05';
 
 =head1 NAME
 
