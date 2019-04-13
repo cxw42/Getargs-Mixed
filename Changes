@@ -1,5 +1,10 @@
 Revision history for Getargs-Mixed
 
+1.06	2019-04-12
+		No cpantesters reports on 5.6, and I don't have a 5.6
+		installation to test on.  However, perlver says it's 5.6-clean,
+		so I'm releasing it anyway! :)  Bug reports welcome.
+
 1.05_1	2019-04-09
 		Testing with 5.006 - no code changes other than the `use 5.006` line
 
