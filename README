@@ -24,9 +24,8 @@ Or, if you have App::cpanminus installed, "cpanm Getargs::Mixed".
 DEPENDENCIES
 
 Doesn't have any if you have a typical Perl 5.8.0 or higher distribution
-installed. It may work on earlier versions of Perl, but the Makefile.PL
-and module will have to be modified since I haven't attempted to test this
-theory.
+installed. It may work on Perl 5.6 as well, but I haven't been able to test
+this theory.
 
 CONTRIBUTING AND REPORTING BUGS
 

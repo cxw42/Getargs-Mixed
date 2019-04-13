@@ -150,9 +150,9 @@ first argument if C<parameters> doesn't detect any invocant.
 The way C<parameters> handles arguments is relatively flexible. However, the
 format must always specify all positional parameters first, if any, followed by
 all positional parameters. The C<parameters> function switches from positional
-to named parameters when it encounters the first string preceded with a hypen
-('-'). This may have the unfortunate side effect of causing normal parameters to
-be misinterpreted as named parameters. If this may be the case with your usage,
+to named parameters when it encounters the first string preceded with a hyphen
+(C<->). This may have the unfortunate side effect of causing normal parameters
+to be interpreted as named parameters. If this may be the case with your usage
 I suggest finding another solution--or modifying this module to suit. A safe
 solution to this is to always use named parameters--at which point you might
 as well not use this module anyway.
@@ -167,7 +167,7 @@ sub parameters {
 	if (ref $_[0] eq 'ARRAY') {
 		$spec = shift;
 	} elsif (ref $_[0]) {
-		croak "Getopt::Mixed doesn't handle a ",ref $_[0]," as a parameter.";
+		croak "Getopt::Mixed doesn't handle a ",ref($_[0])," as a parameter.";
 	} else {
 		$invocant = shift;
 		$spec = shift;
