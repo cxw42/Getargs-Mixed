@@ -11,11 +11,11 @@ our @ISA = qw(Exporter);
 
 our @EXPORT = qw( parameters );
 
-our $VERSION = '1.06';
+our $VERSION = '1.07'; # TRIAL
 
 =head1 NAME
 
-Getargs::Mixed - Perl extension allowing subs to handle mixed parameter lists
+Getargs::Mixed - Extract positional/named parameters to subroutines
 
 =head1 SYNOPSIS
 
@@ -67,16 +67,17 @@ Getargs::Mixed - Perl extension allowing subs to handle mixed parameter lists
 
 =head2 parameters
 
-This allows for the handling mixed argument lists to subroutines. It is meant
-to be flexible and lightweight. It doesn't do any "type-checking", it simply
+This allows for the handling of mixed argument lists to subroutines. It is meant
+to be flexible and lightweight. It doesn't do any "type-checking"; it simply
 turns your parameter lists into hash according to a simple specification.
 
 The main function in this module is C<parameters> and it handles all the work
 of figuring out which parameters have been sent and which have not. When it
 detects an error, it will die with L<Carp::confess|Carp/confess>.
 
-The C<parameters> function takes either two or three arguments. If the first
-argument is a string, it takes at least two arguments: invocant and
+The C<parameters> function takes either one or two arguments, plus the
+list of parameters to be parsed. If the first
+argument is a string, C<parameters> takes at least two arguments: invocant and
 specification.  For example:
 
 	parameters('invocant', [qw(specification)], @_);
@@ -102,7 +103,7 @@ be called like this:
 where C<$obj> is either a blessed reference, package name, or a scalar
 containing a package name.
 
-If, instead, the first parameter is a string, but not equal to C<"self">. The
+If, instead, the first parameter is a string, but not equal to C<"self">, the
 string is considered to be a package name.  In this case, C<parameters> tries to
 guess how the method is being called. This has a lot of potential caveats, so
 B<beware>! Essentially, C<parameters> will check to see if the first argument is
@@ -115,7 +116,7 @@ even though no invocant was actually used.
 
 =head3 Specification
 
-The array reference argument to C<parameters> contains a list of variable names
+The array-reference argument to C<parameters> contains a list of variable names
 that the caller accepts. The parameter list is ordered so that if the user
 passes positional parameters, the same order the parameters are placed, will be
 the order used to set the variables in the returned hash. The list may contain
@@ -138,10 +139,12 @@ the caller, usually C<@_>.
 
 =head3 The results of a parameters() call
 
-The result returned from the C<parameters> function depends on whether there
-are two arguments or three. If C<parameters> is called with two arguments,
+The result returned from the C<parameters> function depends on whether
+it was called with just an array reference, or with a string and an array
+reference.  If C<parameters> is called with an array reference first,
 then a list of pairs (a hash) is returned. If C<parameters> is called with
-three arguments, then an invocant is prepended to the list of pairs first.
+a string and an array reference, then an invocant is prepended to the
+list of pairs first.
 If the first argument is not C<"self">, then the invocant will be set to the
 first argument if C<parameters> doesn't detect any invocant.
 
@@ -149,10 +152,10 @@ first argument if C<parameters> doesn't detect any invocant.
 
 The way C<parameters> handles arguments is relatively flexible. However, the
 format must always specify all positional parameters first, if any, followed by
-all positional parameters. The C<parameters> function switches from positional
+all named parameters. The C<parameters> function switches from positional
 to named parameters when it encounters the first string preceded with a hyphen
-(C<->). This may have the unfortunate side effect of causing normal parameters
-to be interpreted as named parameters. If this may be the case with your usage
+('-'). This may have the unfortunate side effect of causing normal parameters to
+be misinterpreted as named parameters. If this may be the case with your usage,
 I suggest finding another solution--or modifying this module to suit. A safe
 solution to this is to always use named parameters--at which point you might
 as well not use this module anyway.
@@ -285,8 +288,8 @@ to adjust how the parameters are processed.  For example:
 
 The arguments to the C<parameters> method are exactly the same as when
 C<parameters> is called as a function.  This includes the invocant,
-since C<$getargs> is not the invocant of the function that is invoking
-C<< $getargs->parameters() >>.
+since (in the example above) C<$getargs> is not the invocant of the
+function that is calling C<< $getargs->parameters() >>.
 
 =head2 new
 
